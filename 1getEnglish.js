@@ -24,13 +24,11 @@ async function getEnglish() {
 
 	await runTimerCount()
 
-	await end()
+	// await end()
 
 
 	/*==========   End of Calls   ===========*/
 	/*===   bellow is the documentation   ===*/
-
-
 
 
 
@@ -54,31 +52,45 @@ async function getEnglish() {
 
 		await page.goto('https://br.linkedin.com/in/jonathancasagrande', { waitUntil: 'networkidle0' })
 
-		let firstDetourPageLandingCheck = await page.waitForSelector('body > main > div > div > form.join-form > section > p > a', { timeout: 5000 })
+		await checkIfSignUpPage()
 
-		if (firstDetourPageLandingCheck) {
+		await checkIfVerificationPage()
 
-			try {
+	}
 
-				console.log('first landing page')
+	async function checkIfSignUpPage() {
 
-				await page.waitForSelector("body > main > div > div > form.join-form > section > p > a")
-				await page.click("body > main > div > div > form.join-form > section > p > a")
+		try {
 
-				await waitOneSecond()
+			await page.waitForSelector('body > main > div > div > form.join-form > section > p > a', { timeout: 10000 })
 
-				await insertFirstDetourCredentials()
+			await page.waitForSelector("body > main > div > div > form.join-form > section > p > a")
+			await page.click("body > main > div > div > form.join-form > section > p > a")
 
-				await page.waitForSelector('#ember24', { timeout: 0 })
+			await waitOneSecond()
 
-			} catch (error) {
+			await insertFirstDetourCredentials()
 
-				console.log(error)
+			await page.waitForSelector('#ember24', { timeout: 0 })
+			
+		} catch (error) { console.log('\n' + error + '\n' + " it wasn't the sign up page.") }
 
-			}
 
+	}
 
-		}
+	async function checkIfVerificationPage () {
+
+		try {
+			await page.waitForSelector('#app__container > header > div > div > nav > a.nav__button__muted--signin', {timeout: 7000})
+
+			await page.click('#app__container > header > div > div > nav > a.nav__button__muted--signin')
+
+			await waitOneSecond()
+
+			await insertSecondDetourCredentials()
+
+		} catch (error) {console.log('\n' + error + '\n' + " it wasn't the verification page") }
+
 	}
 
 	async function insertFirstDetourCredentials() {
@@ -194,33 +206,33 @@ async function getEnglish() {
 		let checkEnglish27 = await page.evaluate('(document.body.innerText.match(/nivel avançado/igm) || []).length')
 
 
-		if (checkEnglish1) { fs.appendFile('./results/skillCdtsLinks', 'advanced english' + ' ' + checkEnglish1 + '\n') }
-		if (checkEnglish2) { fs.appendFile('./results/skillCdtsLinks', 'fluent english' + ' ' + checkEnglish2 + '\n') }
-		if (checkEnglish3) { fs.appendFile('./results/skillCdtsLinks', 'fluent on english' + ' ' + checkEnglish3 + '\n') }
-		if (checkEnglish4) { fs.appendFile('./results/skillCdtsLinks', 'fluent in english' + ' ' + checkEnglish4 + '\n') }
-		if (checkEnglish5) { fs.appendFile('./results/skillCdtsLinks', 'fluent with english' + ' ' + checkEnglish5 + '\n') }
-		if (checkEnglish6) { fs.appendFile('./results/skillCdtsLinks', 'avançado de ingles' + ' ' + checkEnglish6 + '\n') }
-		if (checkEnglish7) { fs.appendFile('./results/skillCdtsLinks', 'avançado de inglês' + ' ' + checkEnglish7 + '\n') }
-		if (checkEnglish8) { fs.appendFile('./results/skillCdtsLinks', 'inglês avançado' + ' ' + checkEnglish8 + '\n') }
-		if (checkEnglish9) { fs.appendFile('./results/skillCdtsLinks', 'ingles avançado' + ' ' + checkEnglish9 + '\n') }
-		if (checkEnglish10) { fs.appendFile('./results/skillCdtsLinks', 'ingles fluente' + ' ' + checkEnglish10 + '\n') }
-		if (checkEnglish11) { fs.appendFile('./results/skillCdtsLinks', 'inglês fluente' + ' ' + checkEnglish11 + '\n') }
-		if (checkEnglish12) { fs.appendFile('./results/skillCdtsLinks', 'fluente de ingles' + ' ' + checkEnglish12 + '\n') }
-		if (checkEnglish13) { fs.appendFile('./results/skillCdtsLinks', 'fluente de inglês' + ' ' + checkEnglish13 + '\n') }
-		if (checkEnglish14) { fs.appendFile('./results/skillCdtsLinks', 'fluente com inglês' + ' ' + checkEnglish14 + '\n') }
-		if (checkEnglish15) { fs.appendFile('./results/skillCdtsLinks', 'fluente com ingles' + ' ' + checkEnglish15 + '\n') }
-		if (checkEnglish16) { fs.appendFile('./results/skillCdtsLinks', 'fluente em inglês' + ' ' + checkEnglish16 + '\n') }
-		if (checkEnglish17) { fs.appendFile('./results/skillCdtsLinks', 'fluente em ingles' + ' ' + checkEnglish17 + '\n') }
-		if (checkEnglish18) { fs.appendFile('./results/skillCdtsLinks', 'ESL' + ' ' + checkEnglish18 + '\n') }
-		if (checkEnglish19) { fs.appendFile('./results/skillCdtsLinks', 'english on daily basis' + ' ' + checkEnglish19 + '\n') }
-		if (checkEnglish20) { fs.appendFile('./results/skillCdtsLinks', 'english second language' + ' ' + checkEnglish20 + '\n') }
-		if (checkEnglish21) { fs.appendFile('./results/skillCdtsLinks', 'english as second language' + ' ' + checkEnglish21 + '\n') }
-		if (checkEnglish22) { fs.appendFile('./results/skillCdtsLinks', 'ingles como segunda lingua' + ' ' + checkEnglish22 + '\n') }
-		if (checkEnglish23) { fs.appendFile('./results/skillCdtsLinks', 'inglês como segunda lingua' + ' ' + checkEnglish23 + '\n') }
-		if (checkEnglish24) { fs.appendFile('./results/skillCdtsLinks', 'exchange' + ' ' + checkEnglish24 + '\n') }
-		if (checkEnglish25) { fs.appendFile('./results/skillCdtsLinks', 'interchang' + ' ' + checkEnglish25 + '\n') }
-		if (checkEnglish26) { fs.appendFile('./results/skillCdtsLinks', 'nível avançado' + ' ' + checkEnglish26 + '\n') }
-		if (checkEnglish27) { fs.appendFile('./results/skillCdtsLinks', 'nivel avançado' + ' ' + checkEnglish27 + '\n') }
+		if (checkEnglish1) { fs.appendFile('./results/cdtsLinks', 'advanced english' + ' ' + checkEnglish1 + '\n') }
+		if (checkEnglish2) { fs.appendFile('./results/cdtsLinks', 'fluent english' + ' ' + checkEnglish2 + '\n') }
+		if (checkEnglish3) { fs.appendFile('./results/cdtsLinks', 'fluent on english' + ' ' + checkEnglish3 + '\n') }
+		if (checkEnglish4) { fs.appendFile('./results/cdtsLinks', 'fluent in english' + ' ' + checkEnglish4 + '\n') }
+		if (checkEnglish5) { fs.appendFile('./results/cdtsLinks', 'fluent with english' + ' ' + checkEnglish5 + '\n') }
+		if (checkEnglish6) { fs.appendFile('./results/cdtsLinks', 'avançado de ingles' + ' ' + checkEnglish6 + '\n') }
+		if (checkEnglish7) { fs.appendFile('./results/cdtsLinks', 'avançado de inglês' + ' ' + checkEnglish7 + '\n') }
+		if (checkEnglish8) { fs.appendFile('./results/cdtsLinks', 'inglês avançado' + ' ' + checkEnglish8 + '\n') }
+		if (checkEnglish9) { fs.appendFile('./results/cdtsLinks', 'ingles avançado' + ' ' + checkEnglish9 + '\n') }
+		if (checkEnglish10) { fs.appendFile('./results/cdtsLinks', 'ingles fluente' + ' ' + checkEnglish10 + '\n') }
+		if (checkEnglish11) { fs.appendFile('./results/cdtsLinks', 'inglês fluente' + ' ' + checkEnglish11 + '\n') }
+		if (checkEnglish12) { fs.appendFile('./results/cdtsLinks', 'fluente de ingles' + ' ' + checkEnglish12 + '\n') }
+		if (checkEnglish13) { fs.appendFile('./results/cdtsLinks', 'fluente de inglês' + ' ' + checkEnglish13 + '\n') }
+		if (checkEnglish14) { fs.appendFile('./results/cdtsLinks', 'fluente com inglês' + ' ' + checkEnglish14 + '\n') }
+		if (checkEnglish15) { fs.appendFile('./results/cdtsLinks', 'fluente com ingles' + ' ' + checkEnglish15 + '\n') }
+		if (checkEnglish16) { fs.appendFile('./results/cdtsLinks', 'fluente em inglês' + ' ' + checkEnglish16 + '\n') }
+		if (checkEnglish17) { fs.appendFile('./results/cdtsLinks', 'fluente em ingles' + ' ' + checkEnglish17 + '\n') }
+		if (checkEnglish18) { fs.appendFile('./results/cdtsLinks', 'ESL' + ' ' + checkEnglish18 + '\n') }
+		if (checkEnglish19) { fs.appendFile('./results/cdtsLinks', 'english on daily basis' + ' ' + checkEnglish19 + '\n') }
+		if (checkEnglish20) { fs.appendFile('./results/cdtsLinks', 'english second language' + ' ' + checkEnglish20 + '\n') }
+		if (checkEnglish21) { fs.appendFile('./results/cdtsLinks', 'english as second language' + ' ' + checkEnglish21 + '\n') }
+		if (checkEnglish22) { fs.appendFile('./results/cdtsLinks', 'ingles como segunda lingua' + ' ' + checkEnglish22 + '\n') }
+		if (checkEnglish23) { fs.appendFile('./results/cdtsLinks', 'inglês como segunda lingua' + ' ' + checkEnglish23 + '\n') }
+		if (checkEnglish24) { fs.appendFile('./results/cdtsLinks', 'exchange' + ' ' + checkEnglish24 + '\n') }
+		if (checkEnglish25) { fs.appendFile('./results/cdtsLinks', 'interchang' + ' ' + checkEnglish25 + '\n') }
+		if (checkEnglish26) { fs.appendFile('./results/cdtsLinks', 'nível avançado' + ' ' + checkEnglish26 + '\n') }
+		if (checkEnglish27) { fs.appendFile('./results/cdtsLinks', 'nivel avançado' + ' ' + checkEnglish27 + '\n') }
 	}
 
 	async function searchEnglishOnProfiles() {
@@ -238,54 +250,61 @@ async function getEnglish() {
 
 			await waitThreeSeconds()
 
+			await showMoreBioInfos()
 
+			await showMoreFirstExperienceInfos()
 
+			await showMoreExperiences() 
 
-			try {
-
-				await page.click('#line-clamp-show-more-button')
-
-			} catch (error) { console.log(error) }
-
-
-
-
-			try { // show more infos on BIO
-
-				await page.click('#line-clamp-show-more-button')
-
-			} catch (error) { console.log(error) }
-
-
-
-
-			try { // show more infos on 1ST EXPERIENCE
-				await page.click("('.profile-detail').children[1].children[0].children[0].children[0].children[0].children[0].children[1].children[0].children[0].children[0].children[0].children[1].children[0].children[5].children[1].click()')")
-
-			} catch (error) { console.log(error) }
-
-
-
-
-			try { // show more experiences button
-				await page.click("('.profile-detail').children[1].children[0].children[0].children[0].children[0].children[0].children[2].children[0]")
-
-			} catch (error) { console.log(error) }
-
-			
-
-
-
-
-			await fs.appendFile('./results/skillCdtsLinks/', candidateLink + '\n')
+			await fs.appendFile('./results/cdtsLinks/', '\n' + candidateLink + '\n')
 
 			await searchEnglish()
 
-			await fs.appendFile('./results/skillCdtsLinks/', '\n')
+			await fs.appendFile('./results/cdtsLinks/', '\n')
 
 		}
 
 
+
+	}
+
+	async function showMoreBioInfos() {
+
+		try { // show more infos on BIO
+
+			await page.click('#line-clamp-show-more-button')
+
+		} catch (error) { console.log('\n' + error + '\n' + " button not find: see more Bio infos") }
+	}
+
+	async function showMoreFirstExperienceInfos() {
+
+		try { // show more infos on EXPERIENCES
+
+			await page.evaluate(() => {
+				
+				let allExperienceSeeMoreInfosButton = document.querySelectorAll('.pv-profile-section__see-more-inline')
+
+				allExperienceSeeMoreInfosButton.forEach(btn => btn.click())
+
+				// it just got the 1st element of the class, 
+				
+				// the solution is to [0].click()  [1].click()   [2].click()   .....   
+			})
+
+			await page.click('.inline-show-more-text__button')
+
+		} catch (error) { console.log('\n' + error + '\n' + " button not find: see all experience infos") }
+
+	}
+
+	async function showMoreExperiences() {
+
+		
+		try { // show more experiences button
+			await page.click("('.profile-detail').children[1].children[0].children[0].children[0].children[0].children[0].children[2].children[0]")
+
+		} catch (error) { console.log('\n' + error + '\n' + " button not find: see more experiences") }
 
 	}
 
