@@ -1,0 +1,16 @@
+{
+  "name": "l1n43d1n",
+  "version": "1.0.0",
+  "description": "",
+  "main": "launch.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "puppeteer": "^5.4.1"
+  }
+}
