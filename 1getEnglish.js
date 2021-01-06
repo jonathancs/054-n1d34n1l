@@ -24,13 +24,11 @@ async function initiate() {
 
 	await login()
 
-	await catchRedirect()
+	// await prepareProfile()
 
-	await prepareProfile()
+	// await searchEnglishOnProfiles()
 
-	await searchEnglishOnProfiles()
-
-	await close()
+	// await close()
 
 
 
@@ -44,6 +42,7 @@ async function initiate() {
 	async function searchEnglishOnProfiles() {
 		for (let i = 0; i < candidates.length; i++) {
 			let loopedProfile = candidates[i]
+			let englishDetector = []
 
 			await waitThreeSeconds()
 			await waitThreeSeconds()
@@ -88,7 +87,6 @@ async function initiate() {
 			let checkEnglish28 = await page.evaluate('(document.body.innerText.match(/inglês: avançado/igm) || []).length')
 			let checkEnglish29 = await page.evaluate('(document.body.innerText.match(/ingles: avançado/igm) || []).length')
 
-			let englishDetector = []
 
 			if (checkEnglish1) { englishDetector.push(checkEnglish1) }
 			if (checkEnglish2) { englishDetector.push(checkEnglish2) }
@@ -130,17 +128,17 @@ async function initiate() {
 
 				getActualJobPeriod1 = await page.evaluate('document.querySelector("#experience-section > ul").children[0].children[0].children[0].children[0].children[0].children[1].children[1].children[1].innerText')
 
-			} catch (err) { console.log("couldn't find getActualJobPeriod1"+ '\n\n') }
+			} catch (err) { console.log("couldn't find getActualJobPeriod1" + '\n\n') }
 
 			try {
 
 				getActualJobPeriod2 = await page.evaluate('document.querySelector("#experience-section > ul").children[0].children[0].children[0].children[0].children[0].children[1].children[3].children[1].children[1].innerText')
 
-			} catch (err) { console.log("couldn't find getActualJobPeriod2"+ '\n\n') }
+			} catch (err) { console.log("couldn't find getActualJobPeriod2" + '\n\n') }
 
 
 
-			if (englishDetector.length != 0) {
+			if (englishDetector.length > 0) {
 
 				await fs.appendFile('./results/withEnglish', loopedProfile + '\n')
 
@@ -148,7 +146,7 @@ async function initiate() {
 
 				if (getActualJobPeriod2) { fs.appendfile('./results/withEnglish', getActualJobPeriod2 + '\n') }
 
-				if (checkEnviarMensagem) { fs.appendfile('./results/withEnglish', checkEnviarMensagem + '\n') }
+				if (checkEnviarMensagem > 0) { fs.appendfile('./results/withEnglish', checkEnviarMensagem + '\n') }
 
 			} else {
 
@@ -175,6 +173,8 @@ async function initiate() {
 		await checkIfStandardSignInPage()
 
 		await checkIfVerificationPage()
+
+		await catchRedirect()
 
 		async function checkIfSignUpPage() {
 
@@ -249,21 +249,24 @@ async function initiate() {
 
 	async function catchRedirect() {
 
-		await checkIfStandardSignInPage()
+		console.log('entered in catchRedirect')
+		/* 
+		esta parte era para tentar logar a partir 
+		da landing page que vai aparecer à esquerda <==
+		mas parece que me bloquearam.
 
-		async function checkIfStandardSignInPage() {
+		
+		*/
 
-			console.log('entered in checkIfStandardSignInPage')
+		try {
 
-			try {
-				await page.waitForSelector('#username', { timeout: 5000 })
+			await page.type('#username', credentials.email, { delay: 30 })
+			await page.type('#password', credentials.password, { delay: 30 })
 
-				await insertSecondDetourCredentials()
+			// Click Login Button
+			await page.click('#app__container > main > div:nth-child(3) > form > div.login__form_action_container > button', { delay: 1000 })
 
-			} catch (error) { console.log("5 seconds have past. Wasn't the SIGN IN page" + '\n\n') }
-		}
-
-
+		} catch (error) { console.log("unable to insert credentials" + '\n\n') }
 	}
 
 	async function prepareProfile() {
@@ -406,7 +409,6 @@ async function initiate() {
 
 		await browser.close()
 	}
-
 
 }
 
