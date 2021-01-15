@@ -34,3 +34,5 @@ for (let i = 0; i < englishWordsSearch.length; i++) {
 
     await console.log(checkEnglish)
     await console.log(checkIngles)
+
+}

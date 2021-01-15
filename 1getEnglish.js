@@ -24,11 +24,11 @@ async function initiate() {
 
 	await login()
 
-	// await prepareProfile()
+	await prepareProfile()
+	
+	await searchEnglishOnProfiles()
 
-	// await searchEnglishOnProfiles()
-
-	// await close()
+	await close()
 
 
 
@@ -176,6 +176,8 @@ async function initiate() {
 
 		await catchRedirect()
 
+		// url ?  element ?
+
 		async function checkIfSignUpPage() {
 
 			try {
@@ -251,10 +253,12 @@ async function initiate() {
 
 		console.log('entered in catchRedirect')
 		/* 
-		esta parte era para tentar logar a partir 
-		da landing page que vai aparecer à esquerda <==
-		mas parece que me bloquearam.
-
+		
+		eu efetuo o login, e o site me impede de logar.
+		
+		esta parte do código era para tentar logar de novo
+		dessa 2a landing page que vai aparecer à esquerda <==
+		mas parece que bloquearam minha ferramenta de automação (puppeteer).
 		
 		*/
 
