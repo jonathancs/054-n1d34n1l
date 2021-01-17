@@ -137,6 +137,8 @@ async function readProfiles() {
 
 		await page.goto('https://br.linkedin.com/in/jonathancasagrande', { waitUntil: 'networkidle0' })
 
+		
+
 		await checkIfSignUpPage()
 
 		await checkIfStandardSignInPage()
