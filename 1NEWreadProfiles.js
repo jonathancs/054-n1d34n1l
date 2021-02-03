@@ -1,3 +1,5 @@
+/* englishDetector still not working */
+
 // packages
 const puppeteer = require('puppeteer');
 const fs = require('fs').promises;
@@ -5,6 +7,7 @@ const fs = require('fs').promises;
 // files and variables
 const credentials = require('./configs/credentials.json')
 let candidates = require('./configs/candidates.js')
+englishDetector = []
 let numeroDaScreenshot = 1
 
 
@@ -28,6 +31,8 @@ async function readProfiles() {
 
     await visitProfiles()
 
+    // await close()
+
     /*======   DOCUMENTATION   ======*/
 
 
@@ -43,11 +48,11 @@ async function readProfiles() {
 
             await checkIfTwoStepAutentication()
 
-            await checkIfStandardSignInPage()
+            // await checkIfStandardSignInPage()
 
-            await checkIfVerificationPage()
+            // await checkIfVerificationPage()
 
-            i++
+            // i++
 
         }
 
@@ -158,49 +163,25 @@ async function readProfiles() {
 
             await prepareProfile()
 
-            await searchEnglish()
+            try {
+                
+                await evaluateCurrentTime()
 
-            await searchSkillWords()
+            } catch (error) {
 
-            await writeResults()
-
-            // the functions 🔽
-
-            async function searchEnglish() {
-
-                englishDetector.length = []
-
-                checkEnglish1 = await page.evaluate('(document.body.innerText.match(/advanced english/igm) || []).length')
-                checkEnglish2 = await page.evaluate('(document.body.innerText.match(/fluent english/igm) || []).length')
-                checkEnglish3 = await page.evaluate('(document.body.innerText.match(/fluent on english/igm) || []).length')
-                checkEnglish4 = await page.evaluate('(document.body.innerText.match(/fluent in english/igm) || []).length')
-                checkEnglish5 = await page.evaluate('(document.body.innerText.match(/fluent with english/igm) || []).length')
-                checkEnglish6 = await page.evaluate('(document.body.innerText.match(/avançado de ingles/igm) || []).length')
-                checkEnglish7 = await page.evaluate('(document.body.innerText.match(/avançado de inglês/igm) || []).length')
-                checkEnglish8 = await page.evaluate('(document.body.innerText.match(/inglês avançado/igm) || []).length')
-                checkEnglish9 = await page.evaluate('(document.body.innerText.match(/ingles avançado/igm) || []).length')
-                checkEnglish10 = await page.evaluate('(document.body.innerText.match(/ingles fluente/igm) || []).length')
-                checkEnglish11 = await page.evaluate('(document.body.innerText.match(/inglês fluente/igm) || []).length')
-                checkEnglish12 = await page.evaluate('(document.body.innerText.match(/fluente de ingles/igm) || []).length')
-                checkEnglish13 = await page.evaluate('(document.body.innerText.match(/fluente de inglês/igm) || []).length')
-                checkEnglish14 = await page.evaluate('(document.body.innerText.match(/fluente com inglês/igm) || []).length')
-                checkEnglish15 = await page.evaluate('(document.body.innerText.match(/fluente com ingles/igm) || []).length')
-                checkEnglish16 = await page.evaluate('(document.body.innerText.match(/fluente em inglês/igm) || []).length')
-                checkEnglish17 = await page.evaluate('(document.body.innerText.match(/fluente em ingles/igm) || []).length')
-                checkEnglish18 = await page.evaluate('(document.body.innerText.match(/ESL/igm) || []).length')
-                checkEnglish19 = await page.evaluate('(document.body.innerText.match(/english on daily basis/igm) || []).length')
-                checkEnglish20 = await page.evaluate('(document.body.innerText.match(/english second language/igm) || []).length')
-                checkEnglish21 = await page.evaluate('(document.body.innerText.match(/english as second language/igm) || []).length')
-                checkEnglish22 = await page.evaluate('(document.body.innerText.match(/ingles como segunda lingua/igm) || []).length')
-                checkEnglish23 = await page.evaluate('(document.body.innerText.match(/inglês como segunda lingua/igm) || []).length')
-                checkEnglish24 = await page.evaluate('(document.body.innerText.match(/exchange/igm) || []).length')
-                checkEnglish25 = await page.evaluate('(document.body.innerText.match(/interchang/igm) || []).length')
-                checkEnglish26 = await page.evaluate('(document.body.innerText.match(/nível avançado/igm) || []).length')
-                checkEnglish27 = await page.evaluate('(document.body.innerText.match(/nivel avançado/igm) || []).length')
-                checkEnglish28 = await page.evaluate('(document.body.innerText.match(/inglês: avançado/igm) || []).length')
-                checkEnglish29 = await page.evaluate('(document.body.innerText.match(/ingles: avançado/igm) || []).length')
+                await console.log('return false deu certo')
+                
+                await searchEnglish()
+    
+                await searchSkillWords()
+    
+                await writeResults()
 
             }
+            
+
+
+            // the functions 🔽
 
             async function prepareProfile() {
 
@@ -213,6 +194,8 @@ async function readProfiles() {
                 await showMoreProfileInfos()
 
                 await console.log("prepareProfile() completed")
+
+                await evaluateCurrentTime()
 
                 // the functions 🔽
 
@@ -254,6 +237,70 @@ async function readProfiles() {
 
                 }
 
+                async function evaluateCurrentTime() {
+
+                    try {
+
+                        currentJobTime1 = await page.evaluate(`document.querySelector('h4[class="t-14 t-black t-normal"]').innerText`)
+
+                        if ((currentJobTime1) == ("1 mês" || "2 meses" || "3 meses" || "4 meses" || "5 meses")) {
+
+                            1 + 1
+
+                        }
+
+
+                    } catch (error) { return false}
+
+                    try {
+
+                        currentJobTime2 = await page.evaluate(`document.querySelector'span[class="pv-entity__bullet-item-v2"]').innerText`)
+
+                        if ((currentJobTime2) == ("1 mês" || "2 meses" || "3 meses" || "4 meses" || "5 meses")) {
+
+                            1 + 1
+
+                        }
+
+                    } catch (error) { return false}
+                }
+
+            }
+
+            async function searchEnglish() {
+
+                englishDetector.length = []
+
+                checkEnglish1 = await page.evaluate('(document.body.innerText.match(/advanced english/igm) || []).length')
+                checkEnglish2 = await page.evaluate('(document.body.innerText.match(/fluent english/igm) || []).length')
+                checkEnglish3 = await page.evaluate('(document.body.innerText.match(/fluent on english/igm) || []).length')
+                checkEnglish4 = await page.evaluate('(document.body.innerText.match(/fluent in english/igm) || []).length')
+                checkEnglish5 = await page.evaluate('(document.body.innerText.match(/fluent with english/igm) || []).length')
+                checkEnglish6 = await page.evaluate('(document.body.innerText.match(/avançado de ingles/igm) || []).length')
+                checkEnglish7 = await page.evaluate('(document.body.innerText.match(/avançado de inglês/igm) || []).length')
+                checkEnglish8 = await page.evaluate('(document.body.innerText.match(/inglês avançado/igm) || []).length')
+                checkEnglish9 = await page.evaluate('(document.body.innerText.match(/ingles avançado/igm) || []).length')
+                checkEnglish10 = await page.evaluate('(document.body.innerText.match(/ingles fluente/igm) || []).length')
+                checkEnglish11 = await page.evaluate('(document.body.innerText.match(/inglês fluente/igm) || []).length')
+                checkEnglish12 = await page.evaluate('(document.body.innerText.match(/fluente de ingles/igm) || []).length')
+                checkEnglish13 = await page.evaluate('(document.body.innerText.match(/fluente de inglês/igm) || []).length')
+                checkEnglish14 = await page.evaluate('(document.body.innerText.match(/fluente com inglês/igm) || []).length')
+                checkEnglish15 = await page.evaluate('(document.body.innerText.match(/fluente com ingles/igm) || []).length')
+                checkEnglish16 = await page.evaluate('(document.body.innerText.match(/fluente em inglês/igm) || []).length')
+                checkEnglish17 = await page.evaluate('(document.body.innerText.match(/fluente em ingles/igm) || []).length')
+                checkEnglish18 = await page.evaluate('(document.body.innerText.match(/ESL/igm) || []).length')
+                checkEnglish19 = await page.evaluate('(document.body.innerText.match(/english on daily basis/igm) || []).length')
+                checkEnglish20 = await page.evaluate('(document.body.innerText.match(/english second language/igm) || []).length')
+                checkEnglish21 = await page.evaluate('(document.body.innerText.match(/english as second language/igm) || []).length')
+                checkEnglish22 = await page.evaluate('(document.body.innerText.match(/ingles como segunda lingua/igm) || []).length')
+                checkEnglish23 = await page.evaluate('(document.body.innerText.match(/inglês como segunda lingua/igm) || []).length')
+                checkEnglish24 = await page.evaluate('(document.body.innerText.match(/exchange/igm) || []).length')
+                checkEnglish25 = await page.evaluate('(document.body.innerText.match(/interchang/igm) || []).length')
+                checkEnglish26 = await page.evaluate('(document.body.innerText.match(/nível avançado/igm) || []).length')
+                checkEnglish27 = await page.evaluate('(document.body.innerText.match(/nivel avançado/igm) || []).length')
+                checkEnglish28 = await page.evaluate('(document.body.innerText.match(/inglês: avançado/igm) || []).length')
+                checkEnglish29 = await page.evaluate('(document.body.innerText.match(/ingles: avançado/igm) || []).length')
+
             }
 
             async function searchSkillWords() {
@@ -281,267 +328,267 @@ async function readProfiles() {
             async function writeResults() {
 
                 if (englishDetector.length > 0) {
-        
+
                     await writeURL()
-        
+
                     await writeLocation()
-        
+
                     await writeProfileTitle()
-        
+
                     await writeActualJobTitle()
 
                     await writeCurrentJobTime()
-        
+
                     await writeEnglishResults()
-        
+
                     await writeSkills()
-        
+
                     await writeIfAlreadyConnection()
 
                     await fs.appendfile('./results/withEnglish/', '\n')
-        
+
                     // the functions 🔽
-        
+
                     async function writeURL() {
-        
+
                         await fs.appendFile('./results/withEnglish', loopedProfile + '\n')
-        
+
                     }
-        
+
                     async function writeLocation() {
-        
+
                         try {
-        
+
                             let getLocation = await page.evaluate(`document.querySelector('li[class="t-16 t-black t-normal inline-block"]').innerText`)
-        
+
                             await fs.appendFile('./results/withEnglish', getLocation + '\n')
-        
+
                         } catch (error) { "unable to register location" }
-        
+
                     }
-        
+
                     async function writeProfileTitle() {
-        
+
                         try {
-        
+
                             let getLinkedinTitle = await page.evaluate(`document.querySelector('h2[class="mt1 t-18 t-black t-normal break-words"]').innerText`)
-        
+
                             await fs.appendFile('./results/withEnglish', getLinkedinTitle + '\n')
-        
+
                         } catch (error) { "unable to register Linkedin Title" }
-        
+
                     }
-        
+
                     async function writeActualJobTitle() {
-        
+
                         try {
-        
+
                             let getJobTitle = await page.evaluate(`document.querySelectorAll('h3[class="t-16 t-black t-bold"]')[0].innerText`)
-        
+
                             await fs.appendFile('./results/withEnglish', getJobTitle + '\n')
-        
+
                         } catch (error) { "unable to register job Title" }
-        
-        
-        
-        
+
+
+
+
                     }
 
                     async function writeCurrentJobTime() {
 
                         try {
-        
+
                             let getCurrentJobtime = await page.evaluate(`document.querySelectorAll('span[class="pv-entity__bullet-item-v2"]')[0]`)
-        
+
                             await fs.appendFile('./results/withEnglish', getCurrentJobtime + '\n')
-        
+
                         } catch (error) { "unable to register job Title" }
 
-                        
+
 
                     }
-        
+
                     async function writeEnglishResults() {
-        
+
                         if (checkEnglish1) {
-                            fs.appendFile('./results/withEnglish', 'advanced english ' + checkEnglish1 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'advanced english ' + checkEnglish1 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish2) {
-                            fs.appendFile('./results/withEnglish', 'fluent english ' + checkEnglish2 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'fluent english ' + checkEnglish2 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish3) {
-                            fs.appendFile('./results/withEnglish', 'fluent on english ' + checkEnglish3 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'fluent on english ' + checkEnglish3 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish4) {
-                            fs.appendFile('./results/withEnglish', 'fluent in english ' + checkEnglish4 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'fluent in english ' + checkEnglish4 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish5) {
-                            fs.appendFile('./results/withEnglish', 'fluent with english ' + checkEnglish5 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'fluent with english ' + checkEnglish5 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish6) {
-                            fs.appendFile('./results/withEnglish', 'avançado de ingles ' + checkEnglish6 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'avançado de ingles ' + checkEnglish6 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish7) {
-                            fs.appendFile('./results/withEnglish', 'avançado de inglês ' + checkEnglish7 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'avançado de inglês ' + checkEnglish7 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish8) {
-                            fs.appendFile('./results/withEnglish', 'inglês avançado ' + checkEnglish8 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'inglês avançado ' + checkEnglish8 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish9) {
-                            fs.appendFile('./results/withEnglish', 'ingles avançado ' + checkEnglish9 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'ingles avançado ' + checkEnglish9 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish10) {
-                            fs.appendFile('./results/withEnglish', 'ingles fluente ' + checkEnglish10 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'ingles fluente ' + checkEnglish10 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish11) {
-                            fs.appendFile('./results/withEnglish', 'inglês fluente ' + checkEnglish11 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'inglês fluente ' + checkEnglish11 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish12) {
-                            fs.appendFile('./results/withEnglish', 'fluente de ingles ' + checkEnglish12 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'fluente de ingles ' + checkEnglish12 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish13) {
-                            fs.appendFile('./results/withEnglish', 'fluente de inglês ' + checkEnglish13 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'fluente de inglês ' + checkEnglish13 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish14) {
-                            fs.appendFile('./results/withEnglish', 'fluente com inglês ' + checkEnglish14 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'fluente com inglês ' + checkEnglish14 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish15) {
-                            fs.appendFile('./results/withEnglish', 'fluente com ingles ' + checkEnglish15 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'fluente com ingles ' + checkEnglish15 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish16) {
-                            fs.appendFile('./results/withEnglish', 'fluente em inglês ' + checkEnglish16 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'fluente em inglês ' + checkEnglish16 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish17) {
-                            fs.appendFile('./results/withEnglish', 'fluente em ingles ' + checkEnglish17 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'fluente em ingles ' + checkEnglish17 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish18) {
-                            fs.appendFile('./results/withEnglish', 'ESL ' + checkEnglish18 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'ESL ' + checkEnglish18 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish19) {
-                            fs.appendFile('./results/withEnglish', 'english on daily basis ' + checkEnglish19 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'english on daily basis ' + checkEnglish19 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish20) {
-                            fs.appendFile('./results/withEnglish', 'english second language ' + checkEnglish20 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'english second language ' + checkEnglish20 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish21) {
-                            fs.appendFile('./results/withEnglish', 'english as second language ' + checkEnglish21 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'english as second language ' + checkEnglish21 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish22) {
-                            fs.appendFile('./results/withEnglish', 'ingles como segunda lingua ' + checkEnglish22 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'ingles como segunda lingua ' + checkEnglish22 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish23) {
-                            fs.appendFile('./results/withEnglish', 'inglês como segunda lingua ' + checkEnglish23 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'inglês como segunda lingua ' + checkEnglish23 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish24) {
-                            fs.appendFile('./results/withEnglish', 'exchange ' + checkEnglish24 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'exchange ' + checkEnglish24 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish25) {
-                            fs.appendFile('./results/withEnglish', 'interchang ' + checkEnglish25 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'interchang ' + checkEnglish25 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish26) {
-                            fs.appendFile('./results/withEnglish', 'nível avançado ' + checkEnglish26 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'nível avançado ' + checkEnglish26 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish27) {
-                            fs.appendFile('./results/withEnglish', 'nivel avançado ' + checkEnglish27 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'nivel avançado ' + checkEnglish27 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish28) {
-                            fs.appendFile('./results/withEnglish', 'inglês: avançado ' + checkEnglish28 + ' ') 
+                            fs.appendFile('./results/withEnglish', 'inglês: avançado ' + checkEnglish28 + ' ')
                             englishDetector.push('1')
                         }
-                        
-                        
+
+
                         if (checkEnglish29) {
-                            fs.appendFile('./results/withEnglish', 'ingles: avançado ' + checkEnglish29 + '\n') 
+                            fs.appendFile('./results/withEnglish', 'ingles: avançado ' + checkEnglish29 + '\n')
                             englishDetector.push('1')
                         }
-        
+
                     }
-        
+
                     async function writeSkills() {
-        
+
                         skillDetector = 0
-        
+
                         if (dotnet) { await fs.appendfile('./results/withEnglish', '.net ' + dotnet + ' '); await skillDetector++ }
                         if (dotnetCore) { await fs.appendfile('./results/withEnglish', '.net core ' + dotnetCore + ' '); await skillDetector++ }
                         if (cSharpCapitalized) { await fs.appendfile('./results/withEnglish', 'C# ' + cSharpCapitalized + ' '); await skillDetector++ }
@@ -560,346 +607,346 @@ async function readProfiles() {
                         // if (a1) { await fs.appendfile('./results/withEnglish', 'a1' + a1 + '\n') }
                         // if (a1) { await fs.appendfile('./results/withEnglish', 'a1' + a1 + '\n') }
                         // if (a1) { await fs.appendfile('./results/withEnglish', 'a1' + a1 + '\n') }
-        
+
                     }
-        
+
                     async function writeIfAlreadyConnection() {
-        
+
                         try {
-        
+
                             let checkEnviarMensagem = await page.evaluate(`document.querySelector('a[class="message-anywhere-button pv-s-profile-actions pv-s-profile-actions--message ml2 artdeco-button artdeco-button--2 artdeco-button--muted artdeco-button--primary"]')`)
-        
+
                             if (checkEnviarMensagem) { fs.appendFile('./results/withEnglish', 'já é conexão' + '\n\n') }
-        
+
                         } catch (err) { console.log('its not connection' + '\n') }
-        
+
                     }
-        
-        
+
+
                 } else {
-        
+
                     await writeURL()
-        
+
                     await writeLocation()
-        
+
                     await writeProfileTitle()
-        
+
                     await writeActualJobTitle()
 
                     await writeCurrentJobTime()
-        
+
                     await writeEnglishResults()
-        
+
                     await writeSkills()
-        
+
                     await writeIfAlreadyConnection()
 
                     await fs.appendfile('./results/noEnglish/', '\n')
-        
+
                     // the functions 🔽
-        
+
                     async function writeURL() {
-        
+
                         await fs.appendFile('./results/noEnglish', loopedProfile + '\n')
-        
+
                     }
-        
+
                     async function writeLocation() {
-        
+
                         try {
-        
+
                             let getLocation = await page.evaluate(`document.querySelector('li[class="t-16 t-black t-normal inline-block"]').innerText`)
-        
+
                             await fs.appendFile('./results/noEnglish', getLocation + '\n')
-        
+
                         } catch (error) { "unable to register location" }
-        
+
                     }
-        
+
                     async function writeProfileTitle() {
-        
+
                         try {
-        
+
                             let getLinkedinTitle = await page.evaluate(`document.querySelector('h2[class="mt1 t-18 t-black t-normal break-words"]').innerText`)
-        
+
                             await fs.appendFile('./results/noEnglish', getLinkedinTitle + '\n')
-        
+
                         } catch (error) { "unable to register Linkedin Title" }
-        
+
                     }
-        
+
                     async function writeActualJobTitle() {
-        
+
                         try {
-        
+
                             let getJobTitle = await page.evaluate(`document.querySelectorAll('h3[class="t-16 t-black t-bold"]')[0].innerText`)
-        
+
                             await fs.appendFile('./results/noEnglish', getJobTitle + '\n')
-        
+
                         } catch (error) { "unable to register job Title" }
-        
-        
-        
-        
+
+
+
+
                     }
 
                     async function writeCurrentJobTime() {
 
                         try {
-        
+
                             let getCurrentJobtime = await page.evaluate(`document.querySelectorAll('span[class="pv-entity__bullet-item-v2"]')[0]`)
-        
+
                             await fs.appendFile('./results/withEnglish', getCurrentJobtime + '\n')
-        
+
                         } catch (error) { "unable to register job Title" }
 
-                        
+
 
                     }
-        
+
                     async function writeEnglishResults() {
-        
+
                         if (checkEnglish1) {
-                            fs.appendFile('./results/noEnglish', 'advanced english ' + checkEnglish1 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'advanced english ' + checkEnglish1 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish2) {
-                            fs.appendFile('./results/noEnglish', 'fluent english ' + checkEnglish2 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'fluent english ' + checkEnglish2 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish3) {
-                            fs.appendFile('./results/noEnglish', 'fluent on english ' + checkEnglish3 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'fluent on english ' + checkEnglish3 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish4) {
-                            fs.appendFile('./results/noEnglish', 'fluent in english ' + checkEnglish4 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'fluent in english ' + checkEnglish4 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish5) {
-                            fs.appendFile('./results/noEnglish', 'fluent with english ' + checkEnglish5 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'fluent with english ' + checkEnglish5 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish6) {
-                            fs.appendFile('./results/noEnglish', 'avançado de ingles ' + checkEnglish6 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'avançado de ingles ' + checkEnglish6 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish7) {
-                            fs.appendFile('./results/noEnglish', 'avançado de inglês ' + checkEnglish7 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'avançado de inglês ' + checkEnglish7 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish8) {
-                            fs.appendFile('./results/noEnglish', 'inglês avançado ' + checkEnglish8 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'inglês avançado ' + checkEnglish8 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish9) {
-                            fs.appendFile('./results/noEnglish', 'ingles avançado ' + checkEnglish9 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'ingles avançado ' + checkEnglish9 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish10) {
-                            fs.appendFile('./results/noEnglish', 'ingles fluente ' + checkEnglish10 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'ingles fluente ' + checkEnglish10 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish11) {
-                            fs.appendFile('./results/noEnglish', 'inglês fluente ' + checkEnglish11 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'inglês fluente ' + checkEnglish11 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish12) {
-                            fs.appendFile('./results/noEnglish', 'fluente de ingles ' + checkEnglish12 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'fluente de ingles ' + checkEnglish12 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish13) {
-                            fs.appendFile('./results/noEnglish', 'fluente de inglês ' + checkEnglish13 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'fluente de inglês ' + checkEnglish13 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish14) {
-                            fs.appendFile('./results/noEnglish', 'fluente com inglês ' + checkEnglish14 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'fluente com inglês ' + checkEnglish14 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish15) {
-                            fs.appendFile('./results/noEnglish', 'fluente com ingles ' + checkEnglish15 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'fluente com ingles ' + checkEnglish15 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish16) {
-                            fs.appendFile('./results/noEnglish', 'fluente em inglês ' + checkEnglish16 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'fluente em inglês ' + checkEnglish16 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish17) {
-                            fs.appendFile('./results/noEnglish', 'fluente em ingles ' + checkEnglish17 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'fluente em ingles ' + checkEnglish17 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish18) {
-                            fs.appendFile('./results/noEnglish', 'ESL ' + checkEnglish18 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'ESL ' + checkEnglish18 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish19) {
-                            fs.appendFile('./results/noEnglish', 'english on daily basis ' + checkEnglish19 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'english on daily basis ' + checkEnglish19 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish20) {
-                            fs.appendFile('./results/noEnglish', 'english second language ' + checkEnglish20 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'english second language ' + checkEnglish20 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish21) {
-                            fs.appendFile('./results/noEnglish', 'english as second language ' + checkEnglish21 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'english as second language ' + checkEnglish21 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish22) {
-                            fs.appendFile('./results/noEnglish', 'ingles como segunda lingua ' + checkEnglish22 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'ingles como segunda lingua ' + checkEnglish22 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish23) {
-                            fs.appendFile('./results/noEnglish', 'inglês como segunda lingua ' + checkEnglish23 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'inglês como segunda lingua ' + checkEnglish23 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish24) {
-                            fs.appendFile('./results/noEnglish', 'exchange ' + checkEnglish24 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'exchange ' + checkEnglish24 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish25) {
-                            fs.appendFile('./results/noEnglish', 'interchang ' + checkEnglish25 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'interchang ' + checkEnglish25 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish26) {
-                            fs.appendFile('./results/noEnglish', 'nível avançado ' + checkEnglish26 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'nível avançado ' + checkEnglish26 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish27) {
-                            fs.appendFile('./results/noEnglish', 'nivel avançado ' + checkEnglish27 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'nivel avançado ' + checkEnglish27 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish28) {
-                            fs.appendFile('./results/noEnglish', 'inglês: avançado ' + checkEnglish28 + ' ') 
+                            fs.appendFile('./results/noEnglish', 'inglês: avançado ' + checkEnglish28 + ' ')
                             englishDetector.push('1')
                         }
 
 
                         if (checkEnglish29) {
-                            fs.appendFile('./results/noEnglish', 'ingles: avançado ' + checkEnglish29 + '\n') 
+                            fs.appendFile('./results/noEnglish', 'ingles: avançado ' + checkEnglish29 + '\n')
                             englishDetector.push('1')
                         }
 
 
-        
+
                     }
-        
+
                     async function writeSkills() {
-        
+
                         skillDetector = 0
-        
+
                         if (dotnet) {
                             await fs.appendfile('./results/noEnglish', '.net ' + dotnet + ' ')
                             await skillDetector++
                         }
-        
-                        
+
+
                         if (dotnetCore) {
                             await fs.appendfile('./results/noEnglish', '.net core ' + dotnetCore + ' ')
                             await skillDetector++
                         }
-        
-                        
+
+
                         if (cSharpCapitalized) {
                             await fs.appendfile('./results/noEnglish', 'C# ' + cSharpCapitalized + ' ')
                             await skillDetector++
                         }
-        
-                        
+
+
                         if (cSharp) {
                             await fs.appendfile('./results/noEnglish', 'c# ' + cSharp + ' ')
                             await skillDetector++
                         }
-        
-                        
+
+
                         if (angular) {
                             await fs.appendfile('./results/noEnglish', 'angular ' + angular + ' ')
                             await skillDetector++
                         }
-        
-                        
+
+
                         if (react) {
                             await fs.appendfile('./results/noEnglish', 'react ' + react + ' ')
                             await skillDetector++
                         }
-        
-                        
+
+
                         if (automated) {
                             await fs.appendfile('./results/noEnglish', 'automated ' + automated + ' ')
                             await skillDetector++
                         }
-        
-                        
+
+
                         if (automation) {
                             await fs.appendfile('./results/noEnglish', 'automation ' + automation + ' ')
                             await skillDetector++
                         }
-        
-                        
+
+
                         if (salesforce) {
                             await fs.appendfile('./results/noEnglish', 'salesforce ' + salesforce + ' ')
                             await skillDetector++
                         }
-        
-                        
+
+
                         if (salesforceCore) {
                             await fs.appendfile('./results/noEnglish', 'salesforceCore ' + salesforceCore + '\n')
                             await skillDetector++
                         }
-        
-                        
+
+
                         // if (a1) { await fs.appendfile('./results/withEnglish', 'a1' + a1 + '\n') }
                         // if (a1) { await fs.appendfile('./results/withEnglish', 'a1' + a1 + '\n') }
                         // if (a1) { await fs.appendfile('./results/withEnglish', 'a1' + a1 + '\n') }
@@ -908,29 +955,27 @@ async function readProfiles() {
                         // if (a1) { await fs.appendfile('./results/withEnglish', 'a1' + a1 + '\n') }
                         // if (a1) { await fs.appendfile('./results/withEnglish', 'a1' + a1 + '\n') }
                         // if (a1) { await fs.appendfile('./results/withEnglish', 'a1' + a1 + '\n') }
-        
+
                     }
-        
+
                     async function writeIfAlreadyConnection() {
-        
+
                         try {
-        
+
                             let checkEnviarMensagem = await page.evaluate(`document.querySelector('a[class="message-anywhere-button pv-s-profile-actions pv-s-profile-actions--message ml2 artdeco-button artdeco-button--2 artdeco-button--muted artdeco-button--primary"]')`)
-        
+
                             if (checkEnviarMensagem) { fs.appendFile('./results/noEnglish', 'já é conexão' + '\n') }
-        
+
                         } catch (err) { console.log('its not connection' + '\n') }
-        
+
                     }
-        
+
                 }
-        
+
             }
 
         }
-        
     }
-
 
     // standard utility functions
 
