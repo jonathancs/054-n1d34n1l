@@ -9,7 +9,7 @@ const credentials = require('./generalConfigs/credentials.json')
 let candidates = require('./4backBone/candidates.js')
 const positionsText = require('./4backBone/positionsText')
 let numeroDaScreenshot = 1
-let vaga = 'qa'
+let vaga = ''
 
 
 
@@ -33,7 +33,7 @@ async function readProfiles() {
 
     await visitAndContactProfiles()
 
-    await close()
+    // await close()
 
     /*======   DOCUMENTATION   ======*/
 
@@ -192,7 +192,7 @@ async function readProfiles() {
 
             if (await currentURL != loopedProfile) { await page.goto(loopedProfile) }
 
-            await waitTenSeconds()
+            // await waitTenSeconds()
 
             await openMessageBox()
 
@@ -218,11 +218,10 @@ async function readProfiles() {
 
             async function chooseMessage() {
 
-                getCompleteName = await page.evaluate(`document.querySelector('li[class="inline t-24 t-black t-normal break-words"]').innerText`)
-
-                firstName = getCompleteName.substr(0, getCompleteName.indexOf(' '))
+                
 
                 switch (vaga) {
+
                     case 'qa':
                         messageToBeSent = positionsText.qa
                         break;
@@ -271,16 +270,47 @@ async function readProfiles() {
 
                 }
 
-                convertedMessageToBeSent = messageToBeSent.replace("FIRSTNAME", `${firstName}`)
 
             }
 
             async function sendMessage() {
 
+                getCompleteName = await page.evaluate(`document.querySelector('li[class="inline t-24 t-black t-normal break-words"]').innerText`)
+
+                firstName = getCompleteName.substr(0, getCompleteName.indexOf(' '))
+
+                greetingsText = positionsText.greetings
+
+                greetingsTextWithName = greetingsText.replace("FIRSTNAME", `${firstName}`)
+
                 await waitThreeSeconds()
 
-                await page.type('div[class="msg-form__placeholder t-14 t-black--light t-normal visible"]', convertedMessageToBeSent, { delay: 10 })
+                await page.type('div[class="msg-form__placeholder t-14 t-black--light t-normal visible"]', greetingsTextWithName, { delay: 10 })
+                
+                await page.keyboard.press("Enter")
 
+                await waitThreeSeconds()
+                
+                // close chat window
+                await page.evaluate(`document.querySelector('button[class="msg-overlay-bubble-header__control artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--1 artdeco-button--tertiary ember-view"]').click()`)
+
+                await waitOneSecond()
+                await waitOneSecond()
+                
+                // reopen chat window
+                await page.click('a[class="message-anywhere-button pv-s-profile-actions pv-s-profile-actions--message ml2 artdeco-button artdeco-button--2 artdeco-button--muted artdeco-button--primary"]')
+
+                await waitThreeSeconds()
+                
+                try {
+                    // sometimes the site throws you in the messages page, inside that person's messages, this is not a good scenario
+                    
+                    await page.waitForSelector('div[class="msg-form__placeholder t-14 t-black--light t-normal visible"]', {timeout: 5000})
+
+                } catch (error) {console.log('\n\n' + error.stack)}
+                
+                await page.type('div[class="msg-form__placeholder t-14 t-black--light t-normal visible"]', messageToBeSent, { delay: 10 })
+                
                 await page.keyboard.press("Enter")
 
                 await waitThreeSeconds()
@@ -373,12 +403,12 @@ async function readProfiles() {
     }
 
     async function mediumMonitorView() {
-        await page.setViewport({ width: 1300, height: 650, deviceScaleFactor: 1, })
+        await page.setViewport({ width: 1300, height: 600, deviceScaleFactor: 1, })
 
     }
 
     async function notebookSizeView() {
-        await page.setViewport({ width: 1240, height: 650, deviceScaleFactor: 1, })
+        await page.setViewport({ width: 1240, height: 600, deviceScaleFactor: 1, })
 
     }
 
