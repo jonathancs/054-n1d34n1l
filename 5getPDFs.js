@@ -184,15 +184,21 @@ async function readProfiles() {
         for (let i = 0; i < candidates.length; i++) {
             const startLoopTimeMarker = Date.now()
             loopedProfile = candidates[i]
-
-            await waitTenSeconds()
+            
             await waitTenSeconds()
 
             if (await currentURL != loopedProfile) { await page.goto(loopedProfile) }
-
+            
+            await waitTenSeconds()
             await waitTenSeconds()
 
             await downloadPDF()
+
+            await sendConnectionInvite()
+
+            await waitTenSeconds()
+            await waitTenSeconds()
+            await waitTenSeconds()
 
             await timeLoopEnd()
 
@@ -200,7 +206,7 @@ async function readProfiles() {
 
             async function downloadPDF() {
 
-                await page.evaluate(`document.querySelectorAll('span[class="display-flex t-normal pv-s-profile-actions__label"]')[1].click()`)
+                await page.evaluate(`document.querySelectorAll('span[class="display-flex t-normal pv-s-profile-actions__label"]')[2].click()`)
 
                 await waitThreeSeconds()
                 await waitThreeSeconds()
@@ -212,7 +218,29 @@ async function readProfiles() {
 
                     await waitTenSeconds()
 
-                } catch (error) { await waitOneMinute(); await page.evaluate(`document.querySelectorAll('span[class="display-flex t-normal pv-s-profile-actions__label"]')[1].click()`) }
+                } catch (error) { 
+
+                    await waitTenSeconds()
+                    await waitTenSeconds()
+                    await waitTenSeconds()
+                    await waitTenSeconds()
+                    await waitTenSeconds()
+                    await waitTenSeconds()
+
+                    await page.evaluate(`document.querySelectorAll('span[class="display-flex t-normal pv-s-profile-actions__label"]')[2].click()`) }
+
+            }
+
+            async function sendConnectionInvite() {
+
+                try {
+                    
+                    await page.evaluate(`document.querySelector('button[class="pv-s-profile-actions pv-s-profile-actions--connect ml2 artdeco-button artdeco-button--2 artdeco-button--primary ember-view"]').click()`)
+    
+                    await page.evaluate(`document.querySelector('button[class="ml1 artdeco-button artdeco-button--3 artdeco-button--primary ember-view"]').click()`)
+
+                } catch (error) { 1 + 1 }
+                
 
             }
 
