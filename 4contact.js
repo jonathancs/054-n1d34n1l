@@ -6,10 +6,8 @@ const fs = require('fs').promises;
 // files and variables
 const cookies = require('./generalConfigs/cookies.json')
 const credentials = require('./generalConfigs/credentials.json')
-let candidates = require('./4backBone/candidates.js')
+let setup = require('./4backBone/setup.js')
 const positionsText = require('./4backBone/positionsText')
-let numeroDaScreenshot = 1
-let vaga = ''
 
 
 
@@ -21,8 +19,8 @@ async function readProfiles() {
     await standardConfiguration()
 
     // await greaterMonitorView()
-    await mediumMonitorView()
-    // await notebookSizeView()
+    // await mediumMonitorView()
+    await notebookSizeView()
 
 
     /*==========   calls to be done   ===========*/
@@ -33,7 +31,7 @@ async function readProfiles() {
 
     await visitAndContactProfiles()
 
-    // await close()
+    await close()
 
     /*======   DOCUMENTATION   ======*/
 
@@ -60,7 +58,7 @@ async function readProfiles() {
                 await page.setCookie(...cookies)
 
                 try {
-                    
+
                     await page.goto('https://br.linkedin.com/in/jonathancasagrande', { waitUntil: 'networkidle0' })
 
                 } catch (error) { 1 + 1 }
@@ -184,9 +182,9 @@ async function readProfiles() {
 
     async function visitAndContactProfiles() {
 
-        for (let i = 0; i < candidates.length; i++) {
+        for (let i = 0; i < setup.candidatesLinks.length; i++) {
             const startLoopTimeMarker = Date.now()
-            loopedProfile = candidates[i]
+            loopedProfile = setup.candidatesLinks[i]
 
             await waitThreeSeconds()
 
@@ -194,76 +192,127 @@ async function readProfiles() {
 
             // await waitTenSeconds()
 
-            await openMessageBox()
+            let topCard = await page.evaluate(`document.querySelector('section[class="pv-top-card artdeco-card ember-view"]').innerText`)
 
-            await chooseMessage()
+            if (topCard.match(/Conectar/igm)) {
 
-            await sendMessage()
+                await fs.appendFile('./4backBone/pendingStatus', `\nto add\n${loopedProfile}\n`)
 
-            await timeLoopEnd()
+            } else if (topCard.match(/Pendente/igm)) {
+
+                await fs.appendFile('./4backBone/pendingStatus', `\nPending\n${loopedProfile}\n`)
+
+            } else {
+
+                sendMessageButtonLink = await page.evaluate(`document.querySelector('a[class="message-anywhere-button pv-s-profile-actions pv-s-profile-actions--message ml2 artdeco-button artdeco-button--2 artdeco-button--primary"]').href`)
+
+                await waitOneSecond()
+
+                if (sendMessageButtonLink.match(/recruiter/igm)) {
+
+                    await fs.appendFile('./4backBone/headedToRecruiter', `\nHeaded to recruiter\n${loopedProfile}\n`)
+
+                } else {
+
+                    await openMessageBox()
+
+                    await chooseMessage()
+
+                    await sendMessage()
+
+                    await timeLoopEnd()
+
+                }
+
+            }
+
+
 
             // the functions 🔽
 
             async function openMessageBox() {
 
-                await waitTenSeconds()
-                await waitTenSeconds()
+                // await waitTenSeconds()
+                // await waitTenSeconds()
 
-                await page.click('a[class="message-anywhere-button pv-s-profile-actions pv-s-profile-actions--message ml2 artdeco-button artdeco-button--2 artdeco-button--muted artdeco-button--primary"]')
+                try {
+
+                    await page.click('a[class="message-anywhere-button pv-s-profile-actions pv-s-profile-actions--message ml2 artdeco-button artdeco-button--2 artdeco-button--primary"]')
+
+                } catch (error) {
+
+                    await page.reload({ waitUntil: ["networkidle0", "domcontentloaded"] });
+
+                    await page.click('a[class="message-anywhere-button pv-s-profile-actions pv-s-profile-actions--message ml2 artdeco-button artdeco-button--2 artdeco-button--primary"]')
+
+                }
+
 
                 await waitThreeSeconds()
                 await waitThreeSeconds()
-                
+
             }
 
             async function chooseMessage() {
 
-                
 
-                switch (vaga) {
+
+                switch (setup.vaga) {
 
                     case 'qa':
                         messageToBeSent = positionsText.qa
                         break;
 
-                    
-                    
+
+                    case 'nodeInternational':
+                        messageToBeSent = positionsText.nodeInternational
+                        break;
+
+
+
+                    case 'qaInternational':
+                        messageToBeSent = positionsText.qaInternational
+                        break;
+
+
+
+
                     case '.net':
                         messageToBeSent = positionsText.dotNet
                         break;
 
-                    
-                    
+
+
                     case 'sfcc developer':
                         messageToBeSent = positionsText.sfccDeveloper
                         break;
 
-                    
-                    
+
+
                     case 'python':
                         messageToBeSent = positionsText.python
                         break;
 
-                    
-                    
+
+
                     case 'angular':
                         messageToBeSent = positionsText.angular
                         break;
 
-                    
-                    
+
+
                     case 'react':
                         messageToBeSent = positionsText.react
                         break;
 
-                    
-                    
+
+
                     case 'ionic':
                         messageToBeSent = positionsText.ionic
                         break;
 
-                    
-                    
+
+
                     case 'kotlin':
                         messageToBeSent = positionsText.kotlin
                         break;
@@ -286,42 +335,61 @@ async function readProfiles() {
                 await waitThreeSeconds()
 
                 await page.type('div[class="msg-form__placeholder t-14 t-black--light t-normal visible"]', greetingsTextWithName, { delay: 10 })
-                
+
                 await page.keyboard.press("Enter")
 
                 await waitThreeSeconds()
-                
+
                 // close chat window
                 await page.evaluate(`document.querySelector('button[class="msg-overlay-bubble-header__control artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--1 artdeco-button--tertiary ember-view"]').click()`)
 
+                try {
+                    await page.evaluate(`document.querySelector('button[class="msg-overlay-bubble-header__control artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--1 artdeco-button--tertiary ember-view"]')[0].click`)
+                    await page.evaluate(`document.querySelectorAll('button[class="msg-overlay-bubble-header__control artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--1 artdeco-button--tertiary ember-view"]')[0].click`)
+                    await page.evaluate(`document.querySelectorAll('button[class="msg-overlay-bubble-header__control artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--1 artdeco-button--tertiary ember-view"]')[1].click`)
+                    await page.evaluate(`document.querySelectorAll('button[class="msg-overlay-bubble-header__control artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--1 artdeco-button--tertiary ember-view"]')[2].click`)
+                    await page.evaluate(`document.querySelectorAll('button[class="msg-overlay-bubble-header__control artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--1 artdeco-button--tertiary ember-view"]')[3].click`)
+                } catch (error) { 1 + 1 }
+
                 await waitOneSecond()
                 await waitOneSecond()
-                
+
                 // reopen chat window
-                await page.click('a[class="message-anywhere-button pv-s-profile-actions pv-s-profile-actions--message ml2 artdeco-button artdeco-button--2 artdeco-button--muted artdeco-button--primary"]')
+                await page.click('a[class="message-anywhere-button pv-s-profile-actions pv-s-profile-actions--message ml2 artdeco-button artdeco-button--2 artdeco-button--primary"]')
 
                 await waitThreeSeconds()
-                
+
                 try {
                     // sometimes the site throws you in the messages page, inside that person's messages, this is not a good scenario
-                    
-                    await page.waitForSelector('div[class="msg-form__placeholder t-14 t-black--light t-normal visible"]', {timeout: 5000})
 
-                } catch (error) {console.log('\n\n' + error.stack)}
-                
+                    await page.waitForSelector('div[class="msg-form__placeholder t-14 t-black--light t-normal visible"]', { timeout: 5000 })
+
+                } catch (error) { console.log('\n\n' + error.stack) }
+
                 await page.type('div[class="msg-form__placeholder t-14 t-black--light t-normal visible"]', messageToBeSent, { delay: 10 })
-                
+
                 await page.keyboard.press("Enter")
 
                 await waitThreeSeconds()
 
-                await page.screenshot({ path: `./4backBone/prints/${numeroDaScreenshot}.png` })
-                numeroDaScreenshot++
+                await page.screenshot({ path: `./4backBone/prints/${setup.numeroDaScreenshot}.png` })
+                setup.numeroDaScreenshot++
+
+                await page.keyboard.press("Escape")
+
+                try {
+                    await page.evaluate(`document.querySelector('button[class="msg-overlay-bubble-header__control artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--1 artdeco-button--tertiary ember-view"]')[0].click`)
+                    await page.evaluate(`document.querySelectorAll('button[class="msg-overlay-bubble-header__control artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--1 artdeco-button--tertiary ember-view"]')[0].click`)
+                    await page.evaluate(`document.querySelectorAll('button[class="msg-overlay-bubble-header__control artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--1 artdeco-button--tertiary ember-view"]')[1].click`)
+                    await page.evaluate(`document.querySelectorAll('button[class="msg-overlay-bubble-header__control artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--1 artdeco-button--tertiary ember-view"]')[2].click`)
+                    await page.evaluate(`document.querySelectorAll('button[class="msg-overlay-bubble-header__control artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--1 artdeco-button--tertiary ember-view"]')[3].click`)
+                } catch (error) { 1 + 1 }
+
 
             }
 
             async function timeLoopEnd() {
-                
+
                 const endingLoopTimeMarker = Date.now()
                 await console.log(`Loop ${i} executed in`, Math.ceil(((endingLoopTimeMarker - startLoopTimeMarker) / 1000) / 60) + ' minutes');
 
@@ -408,7 +476,7 @@ async function readProfiles() {
     }
 
     async function notebookSizeView() {
-        await page.setViewport({ width: 1240, height: 600, deviceScaleFactor: 1, })
+        await page.setViewport({ width: 1200, height: 550, deviceScaleFactor: 1, })
 
     }
 

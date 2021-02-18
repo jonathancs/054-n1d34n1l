@@ -16,6 +16,12 @@ let angular = `Hello FIRSTNAME, how you've been? \nthanks for accepting my conne
 let qa = `My name is Jonathan, I'm a recruiter for OSF Global. \nthanks for accepting my add solicitation. \ntem avaliado vagas por agora? \nTenho posições 100% remotas de testes automatizados para nosso time interno. \nme avise se puder te enviar mais informações ou deixamos para uma próxima.`
 
 
+let qaInternational = `My name is Jonathan, I'm a recruiter for OSF Global. \nthanks for accepting my add solicitation. \nAre you currently evaluating new job positions? \nI have a 100% remote and international position for a QA Engineer, at our internal teams at OSF. \nLet me know if i can send you the details or should we leave it to another moment.`
+
+
+let nodeInternational = `My name is Jonathan, I'm a recruiter for OSF Global. \nthanks for accepting my add solicitation. \nI see that you have english, and node skill, thats nice. \nAre you currently evaluating new job positions? \nI have a 100% remote and international position for Node Developer, at our internal teams at OSF. \nLet me know if i can send you the details or should we leave it to another moment.`
+
+
 let react = `thanks for accepting my connection. \ni'm Jonathan, recruiter for OSF Global. \ntem avaliado vagas por agora? \nTenho posições 100% remotas para ambas stacks de React para times da OSF. \nme avise se puder te enviar mais informações ou deixamos para uma próxima.`
 
 
@@ -24,4 +30,4 @@ let ionic = `\nthanks for accepting my connection. \nMy name is Jonathan, I'm a 
 
 let kotlin = `My name is Jonathan, I'm a recruiter for OSF Global Services. \nthanks for accepting my add solicitation. \nI saw you have kotlin skill, nice. \ntem avaliado vagas por agora? \nTenho posições 100% remotas de Kotlin para nosso time interno. \nme avise se puder te enviar mais informações ou deixamos para uma próxima. vlww`
 
-module.exports = {dotNet, kotlin, ionic, angular, react, python, sfccDeveloper, qa, greetings}
+module.exports = {dotNet, kotlin, ionic, angular, react, python, sfccDeveloper, qa, greetings, qaInternational, nodeInternational}
